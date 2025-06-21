@@ -1,0 +1,29 @@
+import express from "express";
+import dotenv from "dotenv";
+import authRoutes from "./routes/auth.route.js";// we import all the end points in the form of endpoints
+import userRoutes from "./routes/user.route.js";// we import all the end points in the form of endpoints
+import {ConnDB} from './lib/ConnDB.js'
+import cookieParser from "cookie-parser";
+import chatRoutes from "./routes/chat.route.js";
+import cors from "cors";
+dotenv.config();
+const app = express()
+const port = process.env.PORT;
+
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true,// allow frontend to send the cookies(token) to the user 
+}))
+
+app.use(express.json());
+app.use(cookieParser());
+
+
+app.use("/api/auth",authRoutes); 
+app.use("/api/user",userRoutes); 
+app.use("/api/chat",chatRoutes); 
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+  ConnDB();
+})
