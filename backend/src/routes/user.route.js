@@ -6,7 +6,7 @@ const router = express.Router();
 
 // apply this middleware to all the routes
 
-router.use(protectRoute);
+router.use(protectRoute);  
 
 router.get("/", getRecommendedUsers)
 router.get("/friends", getMyFriends)

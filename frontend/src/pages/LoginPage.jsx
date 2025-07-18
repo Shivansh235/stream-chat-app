@@ -1,44 +1,32 @@
-import React, { useState } from 'react'
-import useLogin from '../hooks/useLogin';
-import {ShipWheelIcon} from "lucide-react";
-import { Link } from "react-router";
+import { useState } from "react";
+import { ShipWheelIcon } from "lucide-react";
+import { Link } from "react-router-dom";
+import useLogin from "../hooks/useLogin";
 
 const LoginPage = () => {
-
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
 
-
-
-    
   // This is how we did it at first, without using our custom hook
-
-    // const queryClient = useQueryClient();
-
-    // const {
-    //   mutate: loginMutation,
-    //   isPending,
-    //   error,
-
-    // } = useMutation ({
-    //   mutationFn : login,
-    //   onSuccess: () => queryClient.invalidateQueries({queryKey:["authUser"]}),
-
-    // });
-
+  // const queryClient = useQueryClient();
+  // const {
+  //   mutate: loginMutation,
+  //   isPending,
+  //   error,
+  // } = useMutation({
+  //   mutationFn: login,
+  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+  // });
 
   // This is how we did it using our custom hook - optimized version
-    const { isPending, error, loginMutation } = useLogin();
+  const { isPending, error, loginMutation } = useLogin();
 
-  
-
-    const handleLogin = (e) =>{
-       e.preventdefault();
-       loginMutation(loginData)
-       setLoginData("")
-    }
+  const handleLogin = (e) => {
+    e.preventDefault();
+    loginMutation(loginData);
+  };
 
   return (
     <div
@@ -94,7 +82,7 @@ const LoginPage = () => {
                     </label>
                     <input
                       type="password"
-                      placeholder="password"
+                      placeholder="••••••••"
                       className="input input-bordered w-full"
                       value={loginData.password}
                       onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
@@ -102,7 +90,7 @@ const LoginPage = () => {
                     />
                   </div>
 
-                  <button type="submit" className="btn btn-primary w-full mt-5" disabled={isPending}>
+                  <button type="submit" className="btn btn-primary w-full" disabled={isPending}>
                     {isPending ? (
                       <>
                         <span className="loading loading-spinner loading-xs"></span>
@@ -132,7 +120,7 @@ const LoginPage = () => {
           <div className="max-w-md p-8">
             {/* Illustration */}
             <div className="relative aspect-square max-w-sm mx-auto">
-              <img src="/Video call-bro.png" alt="Language connection illustration" className="w-full h-full" />
+              <img src="/i.png" alt="Language connection illustration" className="w-full h-full" />
             </div>
 
             <div className="text-center space-y-3 mt-6">
@@ -145,7 +133,6 @@ const LoginPage = () => {
         </div>
       </div>
     </div>
-  )
-}
-
-export default LoginPage
+  );
+};
+export default LoginPage;

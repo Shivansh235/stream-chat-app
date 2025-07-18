@@ -87,12 +87,12 @@ export async function Login(req, res) {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
-      return res.status(401).json({ message: "Invalid Credentials" });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const isPasswordCorrect = await existingUser.matchPassword(password);
     if (!isPasswordCorrect) {
-      return res.status(401).json({ message: "Invalid Credentials" });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const token = jwt.sign(
@@ -126,9 +126,16 @@ export function Logout(req, res) {
 export async function onboard(req, res) {
   try {
     const UserId = req.user._id;
-    const { fullName, bio, nativeLanguage, learningLanguage, location } = req.body;
+    const { fullName, bio, nativeLanguage, learningLanguage, location } =
+      req.body;
 
-    if (!fullName || !bio || !nativeLanguage || !learningLanguage || !location) {
+    if (
+      !fullName ||
+      !bio ||
+      !nativeLanguage ||
+      !learningLanguage ||
+      !location
+    ) {
       return res.status(400).json({
         message: "All fields are required",
         missingFields: [
@@ -145,6 +152,14 @@ export async function onboard(req, res) {
       UserId,
       {
         ...req.body,
+        //         // ...req.body => iska mtlab ye h {
+        //   fullName: req.body.fullName,
+        //   bio: req.body.bio,
+        //   nativeLanguage: req.body.nativeLanguage,
+        //   learningLanguage: req.body.learningLanguage,
+        //   location: req.body.location
+        // }
+
         isOnboarded: true,
       },
       { new: true }
@@ -157,23 +172,23 @@ export async function onboard(req, res) {
     }
 
     try {
-       await upsertStreamUser({
-         id: updateduser._id.toString(),
-         name: updateduser.fullName,
-         image: updateduser.profilePic || "",
-       }) 
+      await upsertStreamUser({
+        id: updateduser._id.toString(),
+        name: updateduser.fullName,
+        image: updateduser.profilePic || "",
+      });
 
-       console.log(`Stream user updated after onboarding for ${updateduser.fullName}`)
+      console.log(
+        `Stream user updated after onboarding for ${updateduser.fullName}`
+      );
     } catch (streamError) {
-      console.log(streamError.message)
-
+      console.log(streamError.message);
     }
 
     return res.status(200).json({
       success: true,
       user: updateduser,
     });
-    
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal server error" });

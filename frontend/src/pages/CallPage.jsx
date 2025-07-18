@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuthUser from "../hooks/useAuthUser";
 import { useQuery } from "@tanstack/react-query";
 import { getStreamToken } from "../lib/api";
@@ -37,15 +37,13 @@ const CallPage = () => {
 
   useEffect(() => {
     const initCall = async () => {
-      if (!tokenData.token || !authUser || !callId) return;
+      if (!tokenData?.token || !authUser || !callId) return;
 
       try {
-        console.log("Initializing Stream video client...");
-
         const user = {
           id: authUser._id,
-          name: authUser.fullName,
-          image: authUser.profilePic,
+          name: authUser.fullName || "Unknown",
+          image: authUser.profilePic || "",
         };
 
         const videoClient = new StreamVideoClient({
@@ -55,10 +53,7 @@ const CallPage = () => {
         });
 
         const callInstance = videoClient.call("default", callId);
-
         await callInstance.join({ create: true });
-
-        console.log("Joined call successfully");
 
         setClient(videoClient);
         setCall(callInstance);
@@ -77,7 +72,7 @@ const CallPage = () => {
 
   return (
     <div className="h-screen flex flex-col items-center justify-center">
-      <div className="relative">
+      <div className="relative w-full h-full">
         {client && call ? (
           <StreamVideo client={client}>
             <StreamCall call={call}>
@@ -97,10 +92,13 @@ const CallPage = () => {
 const CallContent = () => {
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
-
   const navigate = useNavigate();
 
-  if (callingState === CallingState.LEFT) return navigate("/");
+  useEffect(() => {
+    if (callingState === CallingState.LEFT) {
+      navigate("/");
+    }
+  }, [callingState, navigate]);
 
   return (
     <StreamTheme>

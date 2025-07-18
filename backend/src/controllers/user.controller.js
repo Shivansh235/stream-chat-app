@@ -4,16 +4,16 @@ import FriendRequest from "../models/FriendRequest.js";
 export async function getRecommendedUsers(req, res) {
   try {
     const currentUserId = req.user.id;
-    const currentuser = req.user;
+    const currentUser = req.user;
 
     const RecommendedUsers = await User.find({
       $and: [
         { _id: { $ne: currentUserId } },
-        { $id: { $nin: currentuser.friends } },
+        { _id: { $nin: currentUser.friends } },
         { isOnboarded: true },
       ],
     });
-    res.status(200).json({ success: true, RecommendedUsers });
+    res.status(200).json({RecommendedUsers});
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal server error" });

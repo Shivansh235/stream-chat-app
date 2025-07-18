@@ -1,12 +1,13 @@
-import { LoaderIcon } from "lucide-react";
+import { VideoIcon } from "lucide-react";
 
-function ChatLoader() {
+function CallButton({ handleVideoCall }) {
   return (
-    <div className="h-screen flex flex-col items-center justify-center p-4">
-      <LoaderIcon className="animate-spin size-10 text-primary" />
-      <p className="mt-4 text-center text-lg font-mono">Connecting to chat...</p>
+    <div className="p-3 border-b flex items-center justify-end max-w-7xl mx-auto w-full absolute top-0">
+      <button onClick={handleVideoCall} className="btn btn-success btn-sm text-white">
+        <VideoIcon className="size-6" />
+      </button>
     </div>
   );
 }
 
-export default ChatLoader;
+export default CallButton;

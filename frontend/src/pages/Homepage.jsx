@@ -6,11 +6,9 @@ import {
   getUserFriends,
   sendFriendRequest,
 } from "../lib/api";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { CheckCircleIcon, MapPinIcon, UserPlusIcon, UsersIcon } from "lucide-react";
-
-import { capitialize } from "../lib/utils";
-
+import { capitialize } from "../lib/utlis.js";
 import FriendCard, { getLanguageFlag } from "../components/FriendCard";
 import NoFriendsFound from "../components/NoFriendsFound";
 
@@ -23,10 +21,12 @@ const HomePage = () => {
     queryFn: getUserFriends,
   });
 
-  const { data: recommendedUsers = [], isLoading: loadingUsers } = useQuery({
+  const { data: usersData, isLoading: loadingUsers } = useQuery({
     queryKey: ["users"],
     queryFn: getRecommendedUsers,
   });
+
+  const RecommendedUsers = usersData?.RecommendedUsers || [];
 
   const { data: outgoingFriendReqs } = useQuery({
     queryKey: ["outgoingFriendReqs"],
@@ -49,7 +49,7 @@ const HomePage = () => {
   }, [outgoingFriendReqs]);
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8 min-h-screen">
       <div className="container mx-auto space-y-10">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Your Friends</h2>
@@ -89,7 +89,7 @@ const HomePage = () => {
             <div className="flex justify-center py-12">
               <span className="loading loading-spinner loading-lg" />
             </div>
-          ) : recommendedUsers.length === 0 ? (
+          ) : RecommendedUsers.length === 0 ? (
             <div className="card bg-base-200 p-6 text-center">
               <h3 className="font-semibold text-lg mb-2">No recommendations available</h3>
               <p className="text-base-content opacity-70">
@@ -98,7 +98,7 @@ const HomePage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {recommendedUsers.map((user) => {
+              {RecommendedUsers.map((user) => {
                 const hasRequestBeenSent = outgoingRequestsIds.has(user._id);
 
                 return (
@@ -123,7 +123,6 @@ const HomePage = () => {
                         </div>
                       </div>
 
-                      {/* Languages with flags */}
                       <div className="flex flex-wrap gap-1.5">
                         <span className="badge badge-secondary">
                           {getLanguageFlag(user.nativeLanguage)}
@@ -137,7 +136,6 @@ const HomePage = () => {
 
                       {user.bio && <p className="text-sm opacity-70">{user.bio}</p>}
 
-                      {/* Action button */}
                       <button
                         className={`btn w-full mt-2 ${
                           hasRequestBeenSent ? "btn-disabled" : "btn-primary"

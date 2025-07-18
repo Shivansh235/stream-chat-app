@@ -11,7 +11,10 @@ router.post("/Login",Login)
 
 router.post("/onboarding",protectRoute, onboard)
 
-router.get("/exist",protectRoute,(req,res)=>{
+
+//Check if user is loggedIn or not
+
+router.get("/me",protectRoute,(req,res)=>{
     res.status(200).json({success:true, user:req.user})
 })
 
