@@ -23,7 +23,7 @@ Highlights:
 
 10 - ⏳ And much more!
 
-=> Backend:
+=> Backend :
 
 -> PORT=3000
 
@@ -37,6 +37,6 @@ Highlights:
 
 -> NODE_ENV=development
 
-=> Frontend
+=> Frontend :
 
 -> VITE_STREAM_API_KEY=your_stream_api_key
