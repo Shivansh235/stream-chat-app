@@ -28,9 +28,7 @@ app.use("/api/auth",authRoutes);
 app.use("/api/user",userRoutes); 
 app.use("/api/chat",chatRoutes); 
 
-app.get("/" , (req,res)=>{
-  res.send("Hello world!")
-})
+
 
 
 if (process.env.NODE_ENV === "production") {
