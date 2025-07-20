@@ -6,13 +6,11 @@ import {ConnDB} from './lib/ConnDB.js'
 import cookieParser from "cookie-parser";
 import chatRoutes from "./routes/chat.route.js";
 import cors from "cors";
-import path from "path";
 dotenv.config();
 const app = express()
 const port = process.env.PORT || 3000;
 
 
-const __dirname = path.resolve();
 
 
 app.use(cors({
@@ -33,13 +31,7 @@ app.get("/" , (req,res)=>{
 })
 
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-  });
-}
 
 app.listen(3000, () => {
   console.log("Example app listening on port 3000")
